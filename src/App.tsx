@@ -1,24 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useCallback } from "react";
+import { useIdentityKit, useAgent } from "@nfid/identitykit/react";
+import { NFIDW, Plug, InternetIdentity } from "@nfid/identitykit";
 
 function App() {
+  const { connect, user, disconnect } = useIdentityKit();
+
+  const handleConnect = useCallback(async () => {
+    await connect(NFIDW.id);
+  }, [connect]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <p>User Principal: </p>
+      <p>{user?.principal.toString() ?? "--"}</p>
+
+      <button onClick={handleConnect}>connect to nfid</button>
     </div>
   );
 }
